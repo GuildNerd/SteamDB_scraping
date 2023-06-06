@@ -31,7 +31,7 @@ def start():
     j=0
     lista =[]
     #iniciate the scrapping
-    #steamDB.initiate()
+    steamDB.initiate()
     length = get_file_length()
     print(length)
     #open the file

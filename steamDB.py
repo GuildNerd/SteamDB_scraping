@@ -12,13 +12,7 @@ lines=0
 
 # initiate the drive to navigate on web
 def drive_initiate():
-    FFdriver = '/snap/firefox/2667/usr/lib/firefox/geckodriver'
-    firefox = '/snap/firefox/2667/usr/lib/firefox/firefox'
-
-
-    service = Service(executable_path = FFdriver)
-    # Set up the Selenium webdriver
-    driver = webdriver.Firefox(service = service, firefox_binary = firefox)
+    driver = webdriver.Chrome()
     return driver
 
 
@@ -26,7 +20,7 @@ def drive_initiate():
 def get_root_page(driver):
     # Navigate to the webpage
     driver.get('https://steamdb.info/charts/')
-    time.sleep(5)
+    time.sleep(30)
     # Extract the HTML from the webpage
     html = driver.page_source
     return html
@@ -52,14 +46,13 @@ def get_child_pages(html):
 
 def next_page(html, driver):
     i= 0
-    while i<62:
-        childpages = get_child_pages(html)
-        write(childpages)
-        soup = BeautifulSoup(html, 'html.parser')
-        time.sleep(1)
-        button = driver.find_element(By.ID,"table-apps_next")
-        button.click()
-        i+=1
+    childpages = get_child_pages(html)
+    write(childpages)
+    soup = BeautifulSoup(html, 'html.parser')
+    time.sleep(1)
+    button = driver.find_element(By.ID,"table-apps_next")
+    button.click()
+    i+=1
 
 #write all links in a .TXT
 def write(list):
