@@ -15,8 +15,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS steamDB
 
 def get_file_length():
     with open('links.txt', 'r') as file:
-        line = file.readlines()
-        length = line[-1]
+        length = len(file.readlines())
     return length
 
 
@@ -31,7 +30,7 @@ def start():
     j=0
     lista =[]
     #iniciate the scrapping
-    steamDB.initiate()
+    #steamDB.initiate()
     length = get_file_length()
     print(length)
     #open the file
