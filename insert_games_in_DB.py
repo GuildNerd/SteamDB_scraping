@@ -5,7 +5,7 @@ from datetime import datetime
 import steamDB
 from bs4 import BeautifulSoup
 
-
+count = 1
 plataform = 'Pc'
 conn = sqlite3.connect('steamDB.db')
 c = conn.cursor()
@@ -27,6 +27,7 @@ def get_current_time():
 
 
 def start():
+    global count 
     i=0
     j=0
     lista =[]
@@ -41,6 +42,10 @@ def start():
             i+=1
     #to drible the bot searcher need to open a browser to each one link we have (1878 links)
     while j< len(lista):
+        #time out to not get banned from Steam DB
+        if(count % 300 == 0):
+            print("stop")
+            time.sleep(3600)
         #get the Driver to navegate to all links
         driver = steamDB.drive_initiate()
         print(lista[j])
@@ -74,8 +79,12 @@ def start():
         conn.commit()
         driver.close()
         j+=1
+        count+=1
         print(j)
         print(' ')
         time.sleep(6)
     conn.close()
+
+
 start()
+

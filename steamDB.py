@@ -5,10 +5,7 @@ from bs4 import BeautifulSoup
 import time
 
 lines=0
-#conn = sqlite3.connect('documentis_html.db')
-#c = conn.cursor()
-#c.execute('''CREATE TABLE IF NOT EXISTS documentis_html
-             #(id INTEGER PRIMARY KEY, url TEXT, html TEXT, plataform TEXT)''')
+
 
 # initiate the drive to navigate on web
 def drive_initiate():
@@ -24,8 +21,7 @@ def drive_initiate():
 
 # with the page open, get the root page
 def get_root_page(driver):
-    # Navigate to the webpage
-    driver.get('https://steamdb.info/charts/')
+    
     time.sleep(5)
     # Extract the HTML from the webpage
     html = driver.page_source
@@ -44,22 +40,17 @@ def get_child_pages(html):
     links = []
     # append all the links of the game pages
     for info in infos:
-        print(info)
         gamePageUrl = "https://steamdb.info"+info.get("href")
         gamePageUrl = gamePageUrl[0:-7]
         links.append(str(gamePageUrl))
     return links
 
-def next_page(html, driver):
-    i= 0
-    while i<62:
-        childpages = get_child_pages(html)
-        write(childpages)
-        soup = BeautifulSoup(html, 'html.parser')
-        time.sleep(1)
-        button = driver.find_element(By.ID,"table-apps_next")
-        button.click()
-        i+=1
+def next_page( driver):
+    # Navigate to the webpage
+    driver.get('https://steamdb.info/charts/')
+    button = driver.find_element(By.XPATH,"/html/body/div[4]/div[1]/div[2]/div[4]/div[2]/div[1]/div[1]/label/select/option[7]")
+    button.click()
+ 
 
 #write all links in a .TXT
 def write(list):
@@ -81,14 +72,14 @@ def write_number_of_lines():
 # main function
 def initiate():
     driver = drive_initiate()
+    next_page(driver)
+    time.sleep(2)
     rootpage = get_root_page(driver)
-    next_page(rootpage, driver)
+    childpages = get_child_pages(rootpage)
+    write(childpages)
     write_number_of_lines()
 
+    # Close the Selenium webdriver
     driver.quit()
-    
 
 
-# Close the Selenium webdriver
-
-#conn.close()
